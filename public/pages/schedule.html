@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RRS — Schedule</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/styles.css" />
+</head>
+<body>
+
+  <main class="page">
+    <div class="schedule-wrapper" id="schedule-wrapper">
+      <!-- Calendar -->
+      <div class="calendar" id="calendar">
+        <div class="calendar__header">
+          <button class="calendar__nav-btn" id="prev-btn">&#8249;</button>
+          <div class="calendar__month-year">
+            <select id="month-select"></select>
+            <select id="year-select"></select>
+          </div>
+          <button class="calendar__nav-btn" id="next-btn">&#8250;</button>
+        </div>
+        <div class="calendar__grid" id="calendar-grid"></div>
+      </div>
+
+      <!-- Schedule grid -->
+      <div class="schedule-grid-wrapper">
+        <div class="schedule-grid" id="schedule-grid">
+          <div class="empty-state"><div class="empty-state__icon">⏳</div><p class="empty-state__text">Loading schedule...</p></div>
+        </div>
+        <div class="schedule-legend">
+          <div class="schedule-legend__item">
+            <div class="schedule-legend__dot schedule-legend__dot--available"></div>
+            Available to book
+          </div>
+          <div class="schedule-legend__item">
+            <div class="schedule-legend__dot schedule-legend__dot--unoccupied"></div>
+            Unoccupied
+          </div>
+          <div class="schedule-legend__item">
+            <div class="schedule-legend__dot schedule-legend__dot--booked"></div>
+            Booked
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <span>© Copyright</span>
+    <span>PHINMA Araullo University.</span>
+    <span>All Rights Reserved.</span>
+  </footer>
+
+  <!-- Login prompt -->
+  <div class="modal-overlay" id="login-prompt-overlay">
+    <div class="modal modal--warning">
+      <div class="modal__icon">⚠️</div>
+      <h2 class="modal__title">Login Required</h2>
+      <p class="modal__text">You need to login before entering.</p>
+      <div class="modal__actions">
+        <a href="/pages/login.html" class="btn btn--primary btn--full">OK</a>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast-container" class="toast-container"></div>
+  <script src="../js/utils.js"></script>
+  <script src="../js/navbar.js"></script>
+  <script>
+    injectNavbar('schedule');
+    requireAuth();
+
+    const HOURS = ['7am','8am','9am','10am','11am','12pm','1pm','2pm','3pm','4pm','5pm','6pm'];
+    const HOUR_KEYS = ['07','08','09','10','11','12','13','14','15','16','17','18'];
+    const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+
+    let currentDate = new Date();
+    let selectedDate = new Date();
+
+    // Init calendar selects
+    const monthSelect = document.getElementById('month-select');
+    const yearSelect = document.getElementById('year-select');
+    MONTHS.forEach((m, i) => {
+      const opt = document.createElement('option');
+      opt.value = i; opt.textContent = m.slice(0,3);
+      monthSelect.appendChild(opt);
+    });
+    for (let y = 2024; y <= 2030; y++) {
+      const opt = document.createElement('option');
+      opt.value = y; opt.textContent = y;
+      yearSelect.appendChild(opt);
+    }
+
+    function syncSelects() {
+      monthSelect.value = currentDate.getMonth();
+      yearSelect.value = currentDate.getFullYear();
+    }
+
+    function renderCalendar() {
+      syncSelects();
+      const grid = document.getElementById('calendar-grid');
+      const year = currentDate.getFullYear();
+      const month = currentDate.getMonth();
+
+      // Day labels
+      const days = ['Su','Mo','Tu','We','Th','Fr','Sa'];
+      let html = days.map(d => `<div class="calendar__day-label">${d}</div>`).join('');
+
+      const firstDay = new Date(year, month, 1).getDay();
+      const daysInMonth = new Date(year, month + 1, 0).getDate();
+      const today = new Date();
+
+      // Empty cells
+      for (let i = 0; i < firstDay; i++) {
+        html += `<div class="calendar__day calendar__day--empty"></div>`;
+      }
+
+      for (let d = 1; d <= daysInMonth; d++) {
+        const isToday = today.getFullYear() === year && today.getMonth() === month && today.getDate() === d;
+        const isSelected = selectedDate.getFullYear() === year && selectedDate.getMonth() === month && selectedDate.getDate() === d;
+        let cls = 'calendar__day';
+        if (isToday) cls += ' calendar__day--today';
+        if (isSelected) cls += ' calendar__day--selected';
+        html += `<div class="${cls}" data-date="${year}-${String(month+1).padStart(2,'0')}-${String(d).padStart(2,'0')}">${d}</div>`;
+      }
+
+      grid.innerHTML = html;
+    }
+
+    async function loadSchedule(dateStr) {
+      const grid = document.getElementById('schedule-grid');
+      grid.innerHTML = `<div class="empty-state"><div class="empty-state__icon">⏳</div><p class="empty-state__text">Loading...</p></div>`;
+
+      try {
+        const data = await apiFetch(`/rooms/schedule?date=${dateStr}`);
+        renderScheduleGrid(data.rooms, data.bookings);
+      } catch (err) {
+        grid.innerHTML = `<div class="empty-state"><div class="empty-state__icon">❌</div><p class="empty-state__text">${err.message}</p></div>`;
+      }
+    }
+
+    function renderScheduleGrid(rooms, bookings) {
+      const grid = document.getElementById('schedule-grid');
+      if (!rooms.length) {
+        grid.innerHTML = `<div class="empty-state"><div class="empty-state__icon">🚪</div><p class="empty-state__text">No rooms configured.</p></div>`;
+        return;
+      }
+
+      const cols = `60px repeat(${HOURS.length}, 1fr)`;
+
+      // Header row
+      let html = `<div class="schedule-grid__header" style="display:grid;grid-template-columns:${cols};gap:2px;margin-bottom:4px;">
+        <div></div>
+        ${HOURS.map(h => `<div class="schedule-grid__time-label">${h}</div>`).join('')}
+      </div>`;
+
+      const now = new Date();
+      const nowHour = String(now.getHours()).padStart(2,'0');
+      const selectedStr = `${selectedDate.getFullYear()}-${String(selectedDate.getMonth()+1).padStart(2,'0')}-${String(selectedDate.getDate()).padStart(2,'0')}`;
+      const todayStr2 = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;
+      const isToday = selectedStr === todayStr2;
+
+      rooms.forEach(room => {
+        const roomBookings = bookings.filter(b => b.room.toString() === room._id.toString());
+
+        html += `<div class="schedule-grid__row" style="display:grid;grid-template-columns:${cols};gap:2px;margin-bottom:3px;">
+          <div class="schedule-grid__room-label">${escapeHtml(room.number || room.name)}</div>`;
+
+        HOUR_KEYS.forEach(h => {
+          const booking = roomBookings.find(b => {
+            const bStart = parseInt(b.startTime.split(':')[0]);
+            const bEnd = parseInt(b.endTime.split(':')[0]);
+            const hNum = parseInt(h);
+            return hNum >= bStart && hNum < bEnd;
+          });
+
+          let slotClass = 'schedule-grid__slot--available';
+          let title = 'Available to book';
+
+          if (booking) {
+            slotClass = 'schedule-grid__slot--booked';
+            title = `Booked ${booking.startTime}–${booking.endTime}`;
+          } else if (isToday && parseInt(h) < parseInt(nowHour)) {
+            slotClass = 'schedule-grid__slot--unoccupied';
+            title = 'Past / unoccupied';
+          }
+
+          html += `<div class="schedule-grid__slot ${slotClass}" title="${title}"></div>`;
+        });
+
+        html += '</div>';
+      });
+
+      grid.innerHTML = html;
+    }
+
+    function escapeHtml(str) {
+      const d = document.createElement('div'); d.textContent = str; return d.innerHTML;
+    }
+
+    // Calendar nav
+    document.getElementById('prev-btn').addEventListener('click', () => {
+      currentDate.setMonth(currentDate.getMonth() - 1);
+      renderCalendar();
+    });
+
+    document.getElementById('next-btn').addEventListener('click', () => {
+      currentDate.setMonth(currentDate.getMonth() + 1);
+      renderCalendar();
+    });
+
+    monthSelect.addEventListener('change', () => {
+      currentDate.setMonth(parseInt(monthSelect.value));
+      renderCalendar();
+    });
+
+    yearSelect.addEventListener('change', () => {
+      currentDate.setFullYear(parseInt(yearSelect.value));
+      renderCalendar();
+    });
+
+    document.getElementById('calendar-grid').addEventListener('click', (e) => {
+      const day = e.target.closest('[data-date]');
+      if (!day) return;
+      selectedDate = new Date(day.dataset.date + 'T12:00:00');
+      renderCalendar();
+      loadSchedule(day.dataset.date);
+    });
+
+    // Init
+    renderCalendar();
+    loadSchedule(todayStr());
+  </script>
+</body>
+</html>

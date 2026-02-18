@@ -1,0 +1,43 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "api/server.js",
+      "use": "@vercel/node"
+    },
+    {
+      "src": "public/**",
+      "use": "@vercel/static"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "api/server.js"
+    },
+    {
+      "src": "/assets/(.*)",
+      "dest": "public/assets/$1"
+    },
+    {
+      "src": "/css/(.*)",
+      "dest": "public/css/$1"
+    },
+    {
+      "src": "/js/(.*)",
+      "dest": "public/js/$1"
+    },
+    {
+      "src": "/pages/(.*)",
+      "dest": "public/pages/$1"
+    },
+    {
+      "src": "/",
+      "dest": "public/pages/login.html"
+    },
+    {
+      "src": "/(login|signup|announcements|schedule|rooms|account|ai-chat)",
+      "dest": "public/pages/$1.html"
+    }
+  ]
+}

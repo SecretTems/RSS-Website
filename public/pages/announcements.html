@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RRS — Announcements</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/styles.css" />
+</head>
+<body>
+
+  <!-- Navbar injected by JS -->
+
+  <main class="page" id="main-content">
+    <div class="announcements" id="announcements-list">
+      <!-- Cards rendered here -->
+      <div class="empty-state">
+        <div class="empty-state__icon">⏳</div>
+        <p class="empty-state__text">Loading announcements...</p>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <span>© Copyright</span>
+    <span>PHINMA Araullo University.</span>
+    <span>All Rights Reserved.</span>
+  </footer>
+
+  <!-- Login prompt modal -->
+  <div class="modal-overlay" id="login-prompt-overlay">
+    <div class="modal modal--warning">
+      <div class="modal__icon">⚠️</div>
+      <h2 class="modal__title">Login Required</h2>
+      <p class="modal__text">You need to login before entering.</p>
+      <div class="modal__actions">
+        <a href="/pages/login.html" class="btn btn--primary btn--full">OK</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- AI Chat floating button -->
+  <a href="/pages/ai-chat.html" title="AI Assistant" style="
+    position:fixed; bottom:1.5rem; right:1.5rem; z-index:800;
+    width:52px; height:52px; border-radius:50%;
+    background:linear-gradient(135deg,#5b4fcf,#8b5cf6);
+    display:flex; align-items:center; justify-content:center;
+    box-shadow:0 4px 20px rgba(90,70,200,0.5);
+    transition:transform 0.2s, box-shadow 0.2s;
+    text-decoration:none;
+  " onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="white">
+      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/>
+    </svg>
+  </a>
+
+  <div id="toast-container" class="toast-container"></div>
+
+  <script src="../js/utils.js"></script>
+  <script src="../js/navbar.js"></script>
+  <script>
+    injectNavbar('announcements');
+
+    const user = requireAuth();
+    const list = document.getElementById('announcements-list');
+
+    async function loadAnnouncements() {
+      try {
+        const data = await apiFetch('/announcements');
+        renderAnnouncements(data.data);
+      } catch (err) {
+        list.innerHTML = `<div class="empty-state"><div class="empty-state__icon">❌</div><p class="empty-state__text">${err.message}</p></div>`;
+      }
+    }
+
+    function renderAnnouncements(items) {
+      if (!items || items.length === 0) {
+        list.innerHTML = `<div class="empty-state"><div class="empty-state__icon">📢</div><p class="empty-state__text">No announcements yet.</p></div>`;
+        return;
+      }
+
+      list.innerHTML = items.map(ann => {
+        const userLiked = user && ann.likes.includes(user.id);
+        const userHearted = user && ann.hearts.includes(user.id);
+        return `
+          <article class="announcement-card" data-id="${ann._id}">
+            <div class="announcement-card__header">
+              <h2 class="announcement-card__title">${escapeHtml(ann.title)}</h2>
+              <span class="announcement-card__date">${formatDate(ann.createdAt)}</span>
+            </div>
+            <p class="announcement-card__body">${escapeHtml(ann.content)}</p>
+            <div class="announcement-card__footer">
+              <button class="announcement-card__action ${userLiked ? 'announcement-card__action--liked' : ''}" data-action="like" data-id="${ann._id}">
+                👍 <span class="like-count">${ann.likes.length}</span>
+              </button>
+              <button class="announcement-card__action ${userHearted ? 'announcement-card__action--hearted' : ''}" data-action="heart" data-id="${ann._id}">
+                ❤️ <span class="heart-count">${ann.hearts.length}</span>
+              </button>
+            </div>
+          </article>
+        `;
+      }).join('');
+    }
+
+    function escapeHtml(str) {
+      const d = document.createElement('div');
+      d.textContent = str;
+      return d.innerHTML;
+    }
+
+    list.addEventListener('click', async (e) => {
+      const btn = e.target.closest('[data-action]');
+      if (!btn || !user) return;
+
+      const action = btn.dataset.action;
+      const id = btn.dataset.id;
+
+      try {
+        const data = await apiFetch(`/announcements/${id}/${action}`, { method: 'PATCH' });
+        const countEl = btn.querySelector(`.${action}-count`);
+        if (countEl) countEl.textContent = data.likes ?? data.hearts;
+        btn.classList.toggle(`announcement-card__action--${action === 'like' ? 'liked' : 'hearted'}`);
+      } catch (err) {
+        showToast(err.message, 'error');
+      }
+    });
+
+    loadAnnouncements();
+  </script>
+</body>
+</html>
