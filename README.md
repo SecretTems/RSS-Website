@@ -1,2 +1,2 @@
 # RSS-Website
-website for Major Subjects BSIT Sem 2
+Website for Major Subjects BSIT Sem 2
