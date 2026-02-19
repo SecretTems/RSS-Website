@@ -2,10 +2,10 @@
   "name": "rrs-room-reservation-system",
   "version": "1.0.0",
   "description": "Room Reservation System for PHINMA Araullo University",
-  "main": "api/server.js",
+  "main": "api/index.js",
   "scripts": {
-    "start": "node api/server.js",
-    "dev": "nodemon api/server.js"
+    "start": "node api/index.js",
+    "dev": "nodemon api/index.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
