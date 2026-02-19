@@ -10,7 +10,9 @@ const Room = require('./models/Room');
 const Announcement = require('./models/Announcement');
 
 async function seed() {
-  await mongoose.connect(process.env.MONGODB_URI);
+  let uri = process.env.MONGODB_URI || '';
+  if (uri.includes('/?')) uri = uri.replace('/?', '/rrs?');
+  await mongoose.connect(uri);
   console.log('✅ Connected to MongoDB');
 
   // Clear existing

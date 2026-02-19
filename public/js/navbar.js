@@ -3,12 +3,12 @@ function injectNavbar(activePage) {
   const navbarHTML = `
   <nav class="navbar">
     <a href="/pages/announcements.html" class="navbar__brand">
-      <svg class="navbar__brand-logo" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="18" cy="18" r="17" stroke="#2d3a6b" stroke-width="2"/>
-        <path d="M18 4 A14 14 0 0 1 18 32" stroke="#2d3a6b" stroke-width="3" fill="none"/>
-        <path d="M18 4 A14 14 0 0 0 18 32" stroke="#1e2748" stroke-width="3" fill="none"/>
-        <circle cx="18" cy="18" r="4" fill="#2d3a6b"/>
-      </svg>
+      <img
+        src="/assets/logo.png"
+        alt="RRS"
+        class="navbar__brand-logo-img"
+        onerror="this.style.display='none'"
+      />
       RRS
     </a>
 

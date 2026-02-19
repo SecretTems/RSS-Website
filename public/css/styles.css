@@ -99,6 +99,15 @@ input, textarea, select { font-family: var(--font-body); outline: none; }
   height: 36px;
 }
 
+.navbar__brand-logo-img {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--color-navy);
+  flex-shrink: 0;
+}
+
 .navbar__nav {
   display: flex;
   align-items: center;
@@ -1012,6 +1021,7 @@ input, textarea, select { font-family: var(--font-body); outline: none; }
   background-image: url('../assets/bg.jpg');
   background-size: cover;
   background-position: center;
+  background-repeat: no-repeat;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1023,7 +1033,17 @@ input, textarea, select { font-family: var(--font-body); outline: none; }
   content: '';
   position: absolute;
   inset: 0;
-  background: rgba(30, 39, 72, 0.55);
+  background: rgba(20, 28, 58, 0.6);
+  backdrop-filter: blur(1px);
+}
+
+.auth-card__logo-img {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--color-primary);
+  flex-shrink: 0;
 }
 
 .auth-card {
