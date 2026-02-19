@@ -69,14 +69,31 @@ app.use('/api/bookings', require('./routes/bookings'));
 app.use('/api/ai', require('./routes/ai'));
 app.use('/api/users', require('./routes/users'));
 
-// ── Health check ──
+// ── Health check + diagnostics ──
 app.get('/api/health', (req, res) => {
-  res.json({ success: true, message: 'RRS API is running', timestamp: new Date() });
+  res.json({
+    success: true,
+    message: 'RRS API is running',
+    timestamp: new Date(),
+    db: isConnected ? 'connected' : 'disconnected',
+    env: {
+      hasMongoUri: !!process.env.MONGODB_URI,
+      hasJwtSecret: !!process.env.JWT_SECRET,
+      hasSeedSecret: !!process.env.SEED_SECRET,
+      nodeEnv: process.env.NODE_ENV
+    }
+  });
 });
 
 // ── 404 for unknown API routes ──
 app.use('/api/*', (req, res) => {
   res.status(404).json({ success: false, message: 'Route not found.' });
+});
+
+// ── Global error handler ──
+app.use((err, req, res, next) => {
+  console.error('Unhandled error:', err);
+  res.status(500).json({ success: false, message: err.message || 'Internal server error.' });
 });
 
 // ── Local dev only ──
