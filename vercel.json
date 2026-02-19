@@ -13,27 +13,31 @@
   "routes": [
     {
       "src": "/api/(.*)",
-      "dest": "api/server.js"
+      "dest": "/api/server.js"
     },
     {
       "src": "/css/(.*)",
-      "dest": "public/css/$1"
+      "dest": "/public/css/$1"
     },
     {
       "src": "/js/(.*)",
-      "dest": "public/js/$1"
+      "dest": "/public/js/$1"
     },
     {
       "src": "/assets/(.*)",
-      "dest": "public/assets/$1"
+      "dest": "/public/assets/$1"
     },
     {
       "src": "/pages/(.*)",
-      "dest": "public/pages/$1"
+      "dest": "/public/pages/$1"
     },
     {
       "src": "/",
-      "dest": "public/pages/login.html"
+      "dest": "/public/pages/login.html"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/public/pages/login.html"
     }
   ]
 }
