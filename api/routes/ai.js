@@ -39,6 +39,10 @@ const getMockAIResponse = async (message, userId) => {
     return "To cancel a booking, go to your Account page and check your booking history. You can cancel from there.";
   }
 
+  if (msg.includes('room') || msg.includes('book')) {
+    return "You can book rooms in the rooms page.";
+  }
+
   if (msg.includes('schedule') || msg.includes('timetable')) {
     return "The Schedule page shows a color-coded grid of all room availability. Green = available to book, Blue = unoccupied, Red = booked.";
   }

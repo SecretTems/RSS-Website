@@ -8,9 +8,9 @@ const { body, validationResult } = require('express-validator');
 
 const app = express();
 
-// ══════════════════════════════════════════
-// MODELS
-// ══════════════════════════════════════════
+/*
+  MODELS
+*/ 
 
 const userSchema = new mongoose.Schema({
   username: { type: String, required: true, unique: true, trim: true, minlength: 3, maxlength: 30 },
@@ -64,9 +64,9 @@ const announcementSchema = new mongoose.Schema({
 });
 const Announcement = mongoose.models.Announcement || mongoose.model('Announcement', announcementSchema);
 
-// ══════════════════════════════════════════
-// DB CONNECTION
-// ══════════════════════════════════════════
+/*
+  DB CONNECTION
+*/
 
 let isConnected = false;
 async function connectDB() {
@@ -82,9 +82,9 @@ app.use(async (req, res, next) => {
   catch (err) { res.status(500).json({ success: false, message: 'DB connection failed: ' + err.message }); }
 });
 
-// ══════════════════════════════════════════
-// MIDDLEWARE
-// ══════════════════════════════════════════
+/*
+  MIDDLEWARE
+*/
 
 app.use(cors({
   origin: process.env.FRONTEND_URL || '*',
@@ -127,9 +127,9 @@ const sendToken = (user, statusCode, res) => {
   });
 };
 
-// ══════════════════════════════════════════
-// HEALTH
-// ══════════════════════════════════════════
+/*
+  HEALTH
+*/
 
 app.get('/api/health', (req, res) => {
   res.json({ success: true, timestamp: new Date(), db: isConnected ? 'connected' : 'disconnected',
@@ -137,9 +137,9 @@ app.get('/api/health', (req, res) => {
   });
 });
 
-// ══════════════════════════════════════════
-// SEED
-// ══════════════════════════════════════════
+/*
+  SEED
+*/
 
 app.post('/api/seed', async (req, res) => {
   if (!process.env.SEED_SECRET || req.body.secret !== process.env.SEED_SECRET)
@@ -169,9 +169,9 @@ app.post('/api/seed', async (req, res) => {
   } catch (err) { res.status(500).json({ success: false, message: err.message }); }
 });
 
-// ══════════════════════════════════════════
-// AUTH
-// ══════════════════════════════════════════
+/*
+  AUTH
+*/
 
 app.post('/api/auth/register', [
   body('username').trim().isLength({min:3,max:30}).matches(/^[a-zA-Z0-9_]+$/),
@@ -220,9 +220,9 @@ app.delete('/api/auth/delete-account', protect, async (req, res) => {
   } catch (err) { res.status(500).json({ success: false, message: 'Server error.' }); }
 });
 
-// ══════════════════════════════════════════
-// ANNOUNCEMENTS
-// ══════════════════════════════════════════
+/*
+  ANNOUNCEMENTS
+*/
 
 app.get('/api/announcements', protect, async (req, res) => {
   try {
@@ -271,9 +271,9 @@ app.delete('/api/announcements/:id', protect, adminOnly, async (req, res) => {
   catch (err) { res.status(500).json({ success: false, message: 'Server error.' }); }
 });
 
-// ══════════════════════════════════════════
-// ROOMS
-// ══════════════════════════════════════════
+/*
+  ROOMS
+*/
 
 app.get('/api/rooms', protect, async (req, res) => {
   try {
@@ -331,9 +331,9 @@ app.delete('/api/rooms/:id', protect, adminOnly, async (req, res) => {
   catch (err) { res.status(500).json({ success: false, message: 'Server error.' }); }
 });
 
-// ══════════════════════════════════════════
-// BOOKINGS
-// ══════════════════════════════════════════
+/*
+  BOOKINGS
+*/
 
 app.get('/api/bookings/my', protect, async (req, res) => {
   try {
@@ -377,9 +377,9 @@ app.delete('/api/bookings/:id', protect, async (req, res) => {
   } catch (err) { res.status(500).json({ success: false, message: 'Server error.' }); }
 });
 
-// ══════════════════════════════════════════
-// AI CHAT
-// ══════════════════════════════════════════
+/*
+  AI CHAT
+*/
 
 app.post('/api/ai/chat', protect, [body('message').trim().notEmpty().isLength({max:500})], async (req, res) => {
   const errors = validationResult(req);
@@ -411,9 +411,9 @@ app.post('/api/ai/chat', protect, [body('message').trim().notEmpty().isLength({m
   } catch (err) { res.status(500).json({ success: false, message: 'AI error.' }); }
 });
 
-// ══════════════════════════════════════════
-// USERS
-// ══════════════════════════════════════════
+/*
+  USERS
+*/
 
 app.patch('/api/users/profile', protect, [
   body('username').optional().trim().isLength({min:3,max:30}).matches(/^[a-zA-Z0-9_]+$/),
@@ -433,9 +433,9 @@ app.patch('/api/users/profile', protect, [
   }
 });
 
-// ══════════════════════════════════════════
-// 404 + ERROR HANDLER
-// ══════════════════════════════════════════
+/*
+  404 + ERROR HANDLER
+*/
 
 app.use('/api/*', (req, res) => res.status(404).json({ success: false, message: 'Route not found.' }));
 app.use((err, req, res, next) => res.status(500).json({ success: false, message: err.message }));

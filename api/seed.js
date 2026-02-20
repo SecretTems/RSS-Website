@@ -1,17 +1,17 @@
-/**
- * POST /api/seed
- * One-time database seeder — callable via HTTP.
- * Protected by SEED_SECRET env variable.
- * Safe to call multiple times (uses upsert).
- *
- * Usage after deploying:
- *   curl -X POST https://your-app.vercel.app/api/seed \
- *        -H "Content-Type: application/json" \
- *        -d '{"secret":"YOUR_SEED_SECRET"}'
- *
- *  Or just open a fetch() in the browser console:
- *   fetch('/api/seed', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({secret:'YOUR_SEED_SECRET'})}).then(r=>r.json()).then(console.log)
- */
+/*
+POST /api/seed
+One-time database seeder — callable via HTTP.
+Protected by SEED_SECRET env variable.
+Safe to call multiple times (uses upsert).
+
+Usage after deploying:
+curl -X POST https://your-app.vercel.app/api/seed \
+-H "Content-Type: application/json" \
+-d '{"secret":"YOUR_SEED_SECRET"}'
+
+Or just open a fetch() in the browser console:
+fetch('/api/seed', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({secret:'YOUR_SEED_SECRET'})}).then(r=>r.json()).then(console.log)
+*/
 
 const express = require('express');
 const router = express.Router();

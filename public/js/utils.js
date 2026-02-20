@@ -1,10 +1,9 @@
-/* =========================================
-   RRS — Shared Utilities
-   ========================================= */
-
+/*
+  RRS — Shared Utilities
+*/
 const API_BASE = '/api';
 
-/* ---------- HTTP Helper ---------- */
+/* HTTP Helper */
 async function apiFetch(path, options = {}) {
   const token = localStorage.getItem('rrs_token');
   const headers = { 'Content-Type': 'application/json', ...options.headers };
@@ -20,7 +19,7 @@ async function apiFetch(path, options = {}) {
   return data;
 }
 
-/* ---------- Auth ---------- */
+/* Auth */
 function getUser() {
   try { return JSON.parse(localStorage.getItem('rrs_user')); } catch { return null; }
 }
@@ -49,7 +48,7 @@ function showLoginPrompt() {
   if (overlay) overlay.classList.add('modal-overlay--visible');
 }
 
-/* ---------- Toast ---------- */
+/* Toast */
 function showToast(message, type = 'success') {
   const container = document.getElementById('toast-container') || createToastContainer();
   const toast = document.createElement('div');
@@ -67,7 +66,7 @@ function createToastContainer() {
   return div;
 }
 
-/* ---------- Navbar ---------- */
+/* Navbar */
 function initNavbar(activePage) {
   const user = getUser();
   const avatar = document.getElementById('navbar-avatar');
@@ -96,7 +95,7 @@ function initNavbar(activePage) {
   }
 }
 
-/* ---------- Format Date ---------- */
+/* Format Date */
 function formatDate(dateStr) {
   const d = new Date(dateStr);
   return `${String(d.getMonth()+1).padStart(2,'0')} / ${String(d.getDate()).padStart(2,'0')} / ${String(d.getFullYear()).slice(-2)}`;
@@ -107,7 +106,7 @@ function todayStr() {
   return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
 }
 
-/* ---------- Loading state on buttons ---------- */
+/* Loading state on button */
 function setLoading(btn, loading) {
   if (loading) {
     btn.disabled = true;

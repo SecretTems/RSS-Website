@@ -1,10 +1,8 @@
-/* =========================================
-   RRS — Room Reservation System
-   CSS (BEM Methodology)
-   PHINMA Araullo University
-   ========================================= */
+/*
+  BEM Methodology
+*/
 
-/* ---------- CSS Variables ---------- */
+/* CSS Variables */
 :root {
   --color-primary: #f5c518;
   --color-primary-dark: #d4a800;
@@ -42,7 +40,7 @@
   --navbar-height: 68px;
 }
 
-/* ---------- Reset & Base ---------- */
+/*  Reset & Base  */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 html { scroll-behavior: smooth; }
@@ -61,14 +59,14 @@ img { max-width: 100%; display: block; }
 button { cursor: pointer; font-family: var(--font-body); border: none; outline: none; }
 input, textarea, select { font-family: var(--font-body); outline: none; }
 
-/* ---------- Scrollbar ---------- */
+/*  Scrollbar  */
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: var(--color-navy-dark); }
 ::-webkit-scrollbar-thumb { background: var(--color-primary); border-radius: 3px; }
 
-/* =========================================
-   NAVBAR
-   ========================================= */
+/*
+  NAVBAR
+*/
 .navbar {
   position: sticky;
   top: 0;
@@ -170,7 +168,9 @@ input, textarea, select { font-family: var(--font-body); outline: none; }
   fill: var(--color-primary);
 }
 
-/* ---------- Mobile Hamburger ---------- */
+/*
+  Mobile Hamburger 
+*/
 .navbar__hamburger {
   display: none;
   flex-direction: column;
@@ -189,9 +189,9 @@ input, textarea, select { font-family: var(--font-body); outline: none; }
   transition: var(--transition);
 }
 
-/* =========================================
-   PAGE WRAPPER / LAYOUT
-   ========================================= */
+/*
+  PAGE WRAPPER / LAYOUT
+*/
 .page {
   min-height: calc(100vh - var(--navbar-height) - 48px);
   padding: 2rem 1.5rem;
@@ -199,9 +199,9 @@ input, textarea, select { font-family: var(--font-body); outline: none; }
   margin: 0 auto;
 }
 
-/* =========================================
-   FOOTER
-   ========================================= */
+/*
+  FOOTER
+*/
 .footer {
   background: var(--color-primary);
   color: var(--color-navy);
@@ -215,9 +215,9 @@ input, textarea, select { font-family: var(--font-body); outline: none; }
   gap: 1rem;
 }
 
-/* =========================================
-   ANNOUNCEMENT CARDS
-   ========================================= */
+/*
+  ANNOUNCEMENT CARDS
+*/
 .announcements {
   display: flex;
   flex-direction: column;
@@ -297,9 +297,9 @@ input, textarea, select { font-family: var(--font-body); outline: none; }
 .announcement-card__action--liked { color: var(--color-primary-dark); }
 .announcement-card__action--hearted { color: var(--color-red); }
 
-/* =========================================
-   ROOMS GRID
-   ========================================= */
+/*
+  ROOMS GRID
+*/
 .rooms-search {
   margin-bottom: 1.5rem;
   position: relative;
@@ -416,9 +416,9 @@ input, textarea, select { font-family: var(--font-body); outline: none; }
   cursor: not-allowed;
 }
 
-/* =========================================
-   SCHEDULE / CALENDAR
-   ========================================= */
+/*
+  SCHEDULE / CALENDAR
+*/
 .schedule-wrapper {
   display: grid;
   grid-template-columns: 260px 1fr;
@@ -730,9 +730,9 @@ input, textarea, select { font-family: var(--font-body); outline: none; }
   transform: scale(1.05);
 }
 
-/* =========================================
-   ACCOUNT PAGE
-   ========================================= */
+/*
+  ACCOUNT PAGE
+*/
 .account {
   display: grid;
   grid-template-columns: 200px 1fr;
@@ -846,7 +846,9 @@ input, textarea, select { font-family: var(--font-body); outline: none; }
 
 .profile-form__input:focus { border-color: var(--color-primary); }
 
-/* Upload area */
+/* 
+  Upload area 
+*/
 .upload-area {
   border: 2px dashed rgba(255,255,255,0.25);
   border-radius: var(--radius-md);
@@ -881,16 +883,18 @@ input, textarea, select { font-family: var(--font-body); outline: none; }
   border: 2px solid var(--color-primary);
 }
 
-/* Danger zone */
+/* 
+  Danger zone
+*/
 .danger-zone {
   display: flex;
   gap: 1rem;
   flex-wrap: wrap;
 }
 
-/* =========================================
-   BUTTONS (shared)
-   ========================================= */
+/*
+  BUTTONS (shared)
+*/
 .btn {
   display: inline-flex;
   align-items: center;
@@ -964,9 +968,9 @@ input, textarea, select { font-family: var(--font-body); outline: none; }
 .modal__text { font-size: 0.88rem; color: rgba(255,255,255,0.75); text-align: center; margin-bottom: 1.4rem; }
 .modal__actions { display: flex; gap: 0.7rem; }
 
-/* =========================================
-   TOAST NOTIFICATION
-   ========================================= */
+/*
+  TOAST NOTIFICATION
+*/
 .toast-container {
   position: fixed;
   bottom: 1.5rem;
@@ -997,9 +1001,9 @@ input, textarea, select { font-family: var(--font-body); outline: none; }
   to { opacity: 1; transform: none; }
 }
 
-/* =========================================
-   EMPTY STATE
-   ========================================= */
+/*
+  EMPTY STATE
+*/
 .empty-state {
   display: flex;
   flex-direction: column;
@@ -1013,9 +1017,9 @@ input, textarea, select { font-family: var(--font-body); outline: none; }
 .empty-state__icon { font-size: 2.5rem; }
 .empty-state__text { font-size: 0.9rem; }
 
-/* =========================================
-   AUTH PAGES (Login/Signup)
-   ========================================= */
+/*
+  AUTH PAGES (Login/Signup)
+*/
 .auth-page {
   min-height: 100vh;
   background-image: url('../assets/bg.jpg');
@@ -1165,9 +1169,9 @@ input, textarea, select { font-family: var(--font-body); outline: none; }
   margin-bottom: 0.5rem;
 }
 
-/* =========================================
-   LOADING SPINNER
-   ========================================= */
+/*
+  LOADING SPINNER
+*/
 .spinner {
   width: 20px;
   height: 20px;
@@ -1182,9 +1186,9 @@ input, textarea, select { font-family: var(--font-body); outline: none; }
   to { transform: rotate(360deg); }
 }
 
-/* =========================================
-   BOOKING MODAL FORM
-   ========================================= */
+/*
+  BOOKING MODAL FORM
+*/
 .booking-form__group { margin-bottom: 1rem; }
 .booking-form__label { display: block; font-size: 0.82rem; font-weight: 600; color: rgba(255,255,255,0.7); margin-bottom: 0.4rem; }
 .booking-form__input, .booking-form__select {
@@ -1201,9 +1205,9 @@ input, textarea, select { font-family: var(--font-body); outline: none; }
 .booking-form__row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; }
 .booking-form__select option { background: var(--color-navy); }
 
-/* =========================================
-   RESPONSIVE
-   ========================================= */
+/*
+  RESPONSIVE
+*/
 @media (max-width: 900px) {
   .schedule-wrapper { grid-template-columns: 1fr; }
   .account { grid-template-columns: 1fr; }
