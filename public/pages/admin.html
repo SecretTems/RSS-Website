@@ -91,25 +91,9 @@
             `).join('') || '<tr><td colspan="4" class="text-center">No announcements.</td></tr>';
           }
 
-          window.editAnnouncement = async (id) => {
-            const ann = announcements.find(a => a._id === id);
-            if (confirm('Edit?')) {
-              const newTitle = prompt('Title:', ann.title);
-              const newContent = prompt('Content:', ann.content);
-              if (newTitle && newContent) {
-                try {
-                  await apiFetch(`/announcements/${id}`, {
-                    method: 'PUT',
-                    body: JSON.stringify({ title: newTitle, content: newContent })
-                  });
-                  showToast('Updated!');
-                  loadData();
-                } catch (err) {
-                  showToast(err.message);
-                }
-              }
-            }
-          };
+window.editAnnouncement = async (id) => {
+      window.open(`/pages/admin-edit-ann.html?id=${id}`, 'editAnn', 'width=650,height=550,scrollbars=yes,resizable=yes');
+    };
 
           window.deleteAnnouncement = async (id) => {
             if (confirm('Delete?')) {
