@@ -10,6 +10,7 @@ const announcementSchema = new mongoose.Schema({
   content: {
     type: String,
     required: [true, 'Content is required'],
+    trim: true,
     maxlength: [2000, 'Content cannot exceed 2000 characters']
   },
   author: {
@@ -17,18 +18,31 @@ const announcementSchema = new mongoose.Schema({
     ref: 'User',
     required: true
   },
-  likes: [
-    {
+  likes: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
+  }],
+  hearts: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
+  }],
+  comments: [{
+    author: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'User'
+      ref: 'User',
+      required: true
+    },
+    text: {
+      type: String,
+      required: [true, 'Comment text is required'],
+      trim: true,
+      maxlength: [500, 'Comment cannot exceed 500 characters']
+    },
+    createdAt: {
+      type: Date,
+      default: Date.now
     }
-  ],
-  hearts: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'User'
-    }
-  ],
+  }],
   createdAt: {
     type: Date,
     default: Date.now

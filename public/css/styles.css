@@ -1189,6 +1189,30 @@ input, textarea, select { font-family: var(--font-body); outline: none; }
   color: rgba(255,255,255,0.7);
 }
 
+.announcement-card:hover { transform: none; } /* prevent toggle shift */
+.announcement-card.expanded { max-height: none !important; }
+
+.comment {
+  padding: 0.8rem 0;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+.comment:last-child { border-bottom: none; }
+.comment-form {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+.comment-form textarea {
+  flex: 1;
+  padding: 0.6rem;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: var(--radius-sm);
+  color: var(--color-white);
+  resize: none;
+}
+.comment-form textarea::placeholder { color: rgba(255,255,255,0.4); }
+
 .auth-card__footer a {
   color: var(--color-primary);
   font-weight: 700;

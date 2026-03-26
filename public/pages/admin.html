@@ -74,7 +74,8 @@
               <label>Image URL</label>
               <div class="upload-area" id="new-upload">
                 <div class="upload-area__icon">🖼️</div>
-                <div class="upload-area__text">Drop image or paste URL</div>
+                <p class="upload-area__text">Drag & Drop files here<br>or <span class="upload-area__browse">Browse Files</span></p>
+                <input type="file" id="new-photo-input" accept="image/*" style="display:none;" />
                 <input type="url" id="new-imageUrl" class="hidden" placeholder="https://..." />
               </div>
               <div id="new-preview" class="image-preview"></div>
