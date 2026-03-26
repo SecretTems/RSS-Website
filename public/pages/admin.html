@@ -84,7 +84,9 @@
               <label>Description</label>
               <textarea id="new-description" rows="3" placeholder="Room description..."></textarea>
             </div>
-            <button type="submit" class="btn btn--primary">Add Room</button>
+            <div style="grid-column:1/-1;">
+              <button type="submit" class="btn btn--primary" style="justify-self:end;">Add Room</button>
+            </div>
           </form>
         </div>
 
@@ -115,7 +117,6 @@
       <div class="modal-overlay" id="edit-modal-overlay">
         <div class="modal">
           <h2 class="modal__title">Edit Room</h2>
-          <button class="close-btn" id="edit-close-btn">&times;</button>
           <form id="edit-room-form" class="form-grid">
             <input type="hidden" id="edit-id" />
             <div class="form-group">

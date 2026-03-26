@@ -8,7 +8,7 @@ const { protect, adminOnly } = require('../middleware/auth');
 // GET /api/rooms - get all rooms with their current status for a date
 router.get('/', protect, async (req, res) => {
   try {
-    const rooms = await Room.find({ isActive: true }).sort({ number: 1 });
+    const rooms = await Room.find({ isActive: true });
     const dateStr = req.query.date || new Date().toISOString().split('T')[0];
     const date = new Date(dateStr);
     const dayStart = new Date(date.setHours(0, 0, 0, 0));
@@ -50,7 +50,7 @@ router.get('/', protect, async (req, res) => {
 // GET /api/rooms/schedule - get schedule grid data for a date
 router.get('/schedule', protect, async (req, res) => {
   try {
-    const rooms = await Room.find({ isActive: true }).sort((a, b) => Number(a.number) - Number(b.number));
+    const rooms = await Room.find({ isActive: true });
     const dateStr = req.query.date || new Date().toISOString().split('T')[0];
     const date = new Date(dateStr);
     const dayStart = new Date(date.setHours(0, 0, 0, 0));
