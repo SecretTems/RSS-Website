@@ -134,7 +134,8 @@
               <label>Image</label>
               <div class="upload-area" id="edit-upload">
                 <div class="upload-area__icon">🖼️</div>
-                <div class="upload-area__text">Drop image or paste URL</div>
+                <p class="upload-area__text">Drag & Drop files here<br>or <span class="upload-area__browse">Browse Files</span></p>
+                <input type="file" id="edit-photo-input" accept="image/*" style="display:none;" />
                 <input type="url" id="edit-imageUrl" class="hidden" />
               </div>
               <div id="edit-preview" class="image-preview"></div>
@@ -313,10 +314,11 @@
 
     // Edit upload drag-drop (reuse logic)
     const editUpload = document.getElementById('edit-upload');
+    const editPhotoInput = document.getElementById('edit-photo-input');
     const editImageInput = document.getElementById('edit-imageUrl');
     const editPreview = document.getElementById('edit-preview');
 
-    editUpload.addEventListener('click', () => editImageInput.click());
+    editUpload.addEventListener('click', () => editPhotoInput.click());
     editUpload.addEventListener('dragover', (e) => {
       e.preventDefault();
       editUpload.style.borderColor = 'var(--color-primary)';
@@ -330,13 +332,14 @@
       const file = e.dataTransfer.files[0];
       if (file) processEditImageFile(file);
     });
-    editImageInput.addEventListener('change', () => {
-      if (editImageInput.files[0]) processEditImageFile(editImageInput.files[0]);
+    editPhotoInput.addEventListener('change', () => {
+      if (editPhotoInput.files[0]) processEditImageFile(editPhotoInput.files[0]);
     });
     editImageInput.addEventListener('input', (e) => {
       if (e.target.value) {
         editImageBase64 = null;
-        editPreview.innerHTML = '';
+        editPreview.innerHTML = `<img src="${e.target.value}" class="image-preview__img" onerror="this.style.display='none'; this.nextSibling.style.display='block';" />
+        <span>Image Preview</span>`;
         editPreview.style.display = 'flex';
       }
     });
@@ -387,11 +390,12 @@
 
     /* Photo upload for new room */
     const newUpload = document.getElementById('new-upload');
+    const newPhotoInput = document.getElementById('new-photo-input');
     const newImageInput = document.getElementById('new-imageUrl');
     const newPreview = document.getElementById('new-preview');
     let newImageBase64 = null;
 
-    newUpload.addEventListener('click', () => newImageInput.click());
+    newUpload.addEventListener('click', () => newPhotoInput.click());
     newUpload.addEventListener('dragover', (e) => {
       e.preventDefault();
       newUpload.style.borderColor = 'var(--color-primary)';
@@ -405,13 +409,15 @@
       const file = e.dataTransfer.files[0];
       if (file) processNewImageFile(file);
     });
-    newImageInput.addEventListener('change', () => {
-      if (newImageInput.files[0]) processNewImageFile(newImageInput.files[0]);
+    newPhotoInput.addEventListener('change', () => {
+      if (newPhotoInput.files[0]) processNewImageFile(newPhotoInput.files[0]);
     });
     newImageInput.addEventListener('input', (e) => {
       if (e.target.value) {
         newImageBase64 = null;
-        newPreview.style.display = 'none';
+        newPreview.innerHTML = `<img src="${e.target.value}" class="image-preview__img" onerror="this.style.display='none'; this.nextSibling.style.display='block';" />
+        <span>Image Preview</span>`;
+        newPreview.style.display = 'flex';
       }
     });
 
