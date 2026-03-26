@@ -108,10 +108,11 @@
             </div>
             <div class="announcement-details" id="details-${ann._id}" style="display:none; margin-top:1rem; padding-top:1rem; border-top:1px solid rgba(255,255,255,0.1);">
               <div id="comments-${ann._id}" class="comments-list"></div>
-              ${user ? `<div class="comment-form">
-                <textarea id="comment-text-${ann._id}" placeholder="Add a comment..." maxlength="500"></textarea>
-      <button onclick="addComment('${ann._id}', event); event.stopPropagation();" class="btn btn--primary btn-sm">Comment</button>
+              ${user ? `<div class="comment-form" onclick="event.stopPropagation();">
+                <textarea id="comment-text-${ann._id}" placeholder="Add a comment..." onclick="event.stopPropagation();" onfocus="event.stopPropagation();" maxlength="500"></textarea>
+                <button onclick="addComment('${ann._id}', event); event.stopPropagation();" class="btn btn--primary btn-sm">Comment</button>
               </div>` : ''}
+            </div>
             </div>
           </article>
         `;
