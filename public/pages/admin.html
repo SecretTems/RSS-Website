@@ -444,6 +444,7 @@ function renderRooms() {
           <td><strong>${r.name}</strong><br><small>${r.number}</small></td>
           <td>${r.capacity}</td>
           <td>
+            <button class="btn btn--outline btn-sm" onclick="editRoom('${r._id}')">Edit</button>
             <button class="btn btn--danger btn-sm" onclick="deleteRoom('${r._id}')">Delete</button>
           </td>
         </tr>
