@@ -61,7 +61,7 @@ app.use(cookieParser());
 app.use('/api/', limiter);
 
 // Routes
-app.use('/api/seed', require('./routes/seed'));
+app.use('/api/seed', require('./seed'));
 app.use('/api/auth', authLimiter, require('./routes/auth'));
 app.use('/api/announcements', require('./routes/announcements'));
 app.use('/api/rooms', require('./routes/rooms'));

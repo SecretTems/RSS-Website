@@ -16,9 +16,9 @@ fetch('/api/seed', {method:'POST', headers:{'Content-Type':'application/json'}, 
 const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
-const User = require('../models/User');
-const Room = require('../models/Room');
-const Announcement = require('../models/Announcement');
+const User = require('./models/User');
+const Room = require('./models/Room');
+const Announcement = require('./models/Announcement');
 
 router.post('/', async (req, res) => {
   const { secret } = req.body;
