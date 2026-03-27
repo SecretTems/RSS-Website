@@ -16,14 +16,14 @@ router.get('/', protect, async (req, res) => {
 
     const today = new Date();
     today.setHours(0,0,0,0);
-    const now = new Date();
+    const currentTime = new Date();
     
     const bookings = await Booking.find({
       date: { $gte: dayStart, $lte: dayEnd },
       status: 'confirmed',
       $or: [
         { date: { $gt: today } },
-        { date: today, endTime: { $gt: `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}` } }
+        { date: today, endTime: { $gt: `${String(currentTime.getHours()).padStart(2,'0')}:${String(currentTime.getMinutes()).padStart(2,'0')}` } }
       ]
     });
 
@@ -55,14 +55,14 @@ router.get('/schedule', protect, async (req, res) => {
 
     const today = new Date();
     today.setHours(0,0,0,0);
-    const now = new Date();
+    const currentTime = new Date();
     
     const bookings = await Booking.find({
       date: { $gte: dayStart, $lte: dayEnd },
       status: 'confirmed',
       $or: [
         { date: { $gt: today } },
-        { date: today, endTime: { $gt: `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}` } }
+        { date: today, endTime: { $gt: `${String(currentTime.getHours()).padStart(2,'0')}:${String(currentTime.getMinutes()).padStart(2,'0')}` } }
       ]
     }).populate('user', 'username');
 
