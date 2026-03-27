@@ -55,11 +55,7 @@
           <input class="booking-form__input" type="date" id="booking-date" required />
           <p class="auth-form__error-msg" id="booking-date-error"></p>
         </div>
-        <div class="booking-rules">
-          <div style="font-size:0.82rem; color:rgba(255,255,255,0.7); padding:0.6rem; background:rgba(255,255,255,0.05); border-radius:var(--radius-sm); border-left:3px solid var(--color-primary);">
-            📋 <strong>Rules:</strong> No bookings on Sundays. 7AM-7PM only. Minimum 1 hour.
-          </div>
-        </div>
+
         <div class="booking-form__row">
           <div class="booking-form__group">
             <label class="booking-form__label">Start Time</label>
@@ -120,7 +116,9 @@
         grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1"><div class="empty-state__icon">🚪</div><p class="empty-state__text">No rooms found.</p></div>`;
         return;
       }
-      grid.innerHTML = rooms.map(room => {
+      // Sort rooms numerically
+      const sorted = rooms.slice().sort((a, b) => parseInt(a.number) - parseInt(b.number));
+      grid.innerHTML = sorted.map(room => {
         const isAvailable = room.status === 'available';
         const isBooked = room.status === 'booked';
         const badgeClass = isAvailable ? 'available' : 'booked';

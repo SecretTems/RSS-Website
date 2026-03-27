@@ -653,6 +653,41 @@ input, textarea, select { font-family: var(--font-body); outline: none; }
 .schedule-legend__dot--available { background: #4caf50; }
 .schedule-legend__dot--booked { background: #e03030; }
 
+.schedule-date-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.schedule-date-btn {
+  background: var(--color-primary);
+  color: var(--color-navy);
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background var(--transition);
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.schedule-date-btn:hover {
+  background: var(--color-primary-dark);
+  transform: translateY(-1px);
+}
+
+.date-modal-grid {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 1rem;
+  align-items: end;
+}
+
 /* =========================================
    AI CHAT
    ========================================= */
