@@ -27,7 +27,7 @@ async function apiFetch(path, options = {}) {
     } catch (parseErr) {
       // Non-JSON response (HTML error page), use text preview
       const text = await res.text();
-      errorMsg = text.includes('server error') ? 
+      errorMsg = text.includes('server error') || text.includes('error') ? 
         'Server error (check console)' : 
         text.slice(0, 100) + '...';
     }
@@ -63,7 +63,7 @@ function requireAuth() {
   const user = getUser();
   if (!user) {
     showLoginPrompt();
-    return null;
+    return null; 
   }
   return user;
 }
@@ -80,7 +80,11 @@ function showToast(message, type = 'success') {
   toast.className = `toast toast--${type}`;
   toast.textContent = message;
   container.appendChild(toast);
-  setTimeout(() => { toast.style.opacity = '0'; toast.style.transition = 'opacity 0.3s'; setTimeout(() => toast.remove(), 300); }, 3500);
+  setTimeout(() => { 
+    toast.style.opacity = '0'; 
+    toast.style.transition = 'opacity 0.3s'; 
+    setTimeout(() => toast.remove(), 300); 
+  }, 3500);
 }
 
 function createToastContainer() {
@@ -98,32 +102,28 @@ function initNavbar(activePage) {
   const hamburger = document.getElementById('navbar-hamburger');
   const nav = document.getElementById('navbar-nav');
 
-  // Set active link
   document.querySelectorAll('.navbar__link').forEach(link => {
     link.classList.remove('navbar__link--active');
     if (link.dataset.page === activePage) link.classList.add('navbar__link--active');
   });
 
-  // Set avatar photo
   if (avatar && user && user.profilePhoto) {
     avatar.innerHTML = `<img src="${user.profilePhoto}" alt="avatar">`;
   }
 
-  // Hamburger toggle
   if (hamburger && nav) {
     hamburger.addEventListener('click', () => nav.classList.toggle('navbar__nav--open'));
   }
 
-  // If user is not logged in, show prompt on protected routes
   if (!user && activePage !== 'login' && activePage !== 'signup') {
     showLoginPrompt();
   }
 }
 
-/* Format Date -->
+/* Format Date */
 function formatDate(dateStr) {
   const d = new Date(dateStr);
-  return `${String(d.getMonth()+1).padStart(2,'0')} / ${String(d.getDate()).padStart(2,'0')} / ${String(d.getFullYear()).slice(-2)}`;
+  return `${String(d.getMonth()+1).padStart(2,'0')}/${String(d.getDate()).padStart(2,'0')}/${String(d.getFullYear()).slice(-2)}`;
 }
 
 function todayStr() {
