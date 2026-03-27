@@ -448,10 +448,11 @@ function renderRooms() {
       };
       if (!data.title || !data.content) return showToast('Fill all fields', 'error');
       try {
-        await apiFetch(`/announcements/${editingAnnId}`, {
+        await apiFetch(`/announcements/${id}`, {
           method: 'PUT',
           body: JSON.stringify(data)
         });
+        
         showToast('Announcement updated!', 'success');
         document.getElementById('edit-ann-modal-overlay').classList.remove('modal-overlay--visible');
         loadData();
