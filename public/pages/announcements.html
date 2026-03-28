@@ -203,28 +203,15 @@ ${escapeHtml(ann.author?.username || 'Deleted User')} • ${formatDate(ann.creat
               <small style="opacity:.6;margin-left:.2rem;">${new Date(c.createdAt).toLocaleString()}</small>
             </div>
             <p style="margin:0 .2rem 0 0;">${escapeHtml(c.text)}</p>
-            ${getIsAdmin() ? `<button onclick="deleteComment('${id}', '${c._id}')" style="float:right;background:none;border:none;color:var(--color-red);font-size:1.1rem;cursor:pointer;padding:.2rem;">🗑️</button>` : ''}
           </div>
         `).join('') : '<p style="opacity:.6;text-align:center;">No comments</p>';
-      } catch (err) {
+      } catch {
         document.getElementById(`comments-${id}`).innerHTML = '<p>Error loading</p>';
       }
     }
 
-    window.deleteComment = async (annId, cid) => {
-      if (!confirm('Delete this comment permanently?')) return;
-      try {
-        await apiFetch(`/announcements/${annId}/comments/${cid}`, { method: 'DELETE' });
-        showToast('Comment deleted.');
-        loadComments(annId);
-      } catch (err) {
-        showToast(err.message, 'error');
-      }
-    };
-
     loadAnnouncements();
   </script>
-
 </body>
 </html>
 

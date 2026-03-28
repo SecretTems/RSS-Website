@@ -1,15 +1,12 @@
 const express = require('express');
-router = express.Router();
-
-// GET /api/announcements - public
-router.get('/', async (req, res) => {
-  try {
+const router = express.Router();
 const { body, validationResult } = require('express-validator');
 const Announcement = require('../models/Announcement');
 const { protect, adminOnly } = require('../middleware/auth');
 
 // GET /api/announcements - public
-
+router.get('/', async (req, res) => {
+  try {
     const announcements = await Announcement.find()
       .sort({ createdAt: -1 })
       .populate('author', 'username profilePhoto')
@@ -19,7 +16,6 @@ const { protect, adminOnly } = require('../middleware/auth');
       });
     res.json({ success: true, data: announcements });
   } catch (err) {
-    console.error('Announcements GET error:', err);
     res.status(500).json({ success: false, message: 'Server error.' });
   }
 });

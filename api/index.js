@@ -226,7 +226,56 @@ app.delete('/api/auth/delete-account', protect, async (req, res) => {
   } catch (err) { res.status(500).json({ success: false, message: 'Server error.' }); }
 });
 
-/* Inline handlers removed - using api/routes/announcements.js */
+/*
+  ANNOUNCEMENTS
+*/
+
+app.get('/api/announcements', protect, async (req, res) => {
+  try {
+    const data = await Announcement.find().sort({ createdAt: -1 }).populate('author','username');
+    res.json({ success: true, data });
+  } catch (err) { res.status(500).json({ success: false, message: 'Server error.' }); }
+});
+
+app.post('/api/announcements', protect, adminOnly, [
+  body('title').trim().notEmpty().isLength({max:150}),
+  body('content').trim().notEmpty().isLength({max:2000})
+], async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) return res.status(400).json({ success: false, errors: errors.array() });
+  try {
+    const ann = await Announcement.create({ title: req.body.title, content: req.body.content, author: req.user._id });
+    await ann.populate('author','username');
+    res.status(201).json({ success: true, data: ann });
+  } catch (err) { res.status(500).json({ success: false, message: 'Server error.' }); }
+});
+
+app.patch('/api/announcements/:id/like', protect, async (req, res) => {
+  try {
+    const ann = await Announcement.findById(req.params.id);
+    if (!ann) return res.status(404).json({ success: false, message: 'Not found.' });
+    const idx = ann.likes.indexOf(req.user._id);
+    if (idx === -1) ann.likes.push(req.user._id); else ann.likes.splice(idx,1);
+    await ann.save();
+    res.json({ success: true, likes: ann.likes.length });
+  } catch (err) { res.status(500).json({ success: false, message: 'Server error.' }); }
+});
+
+app.patch('/api/announcements/:id/heart', protect, async (req, res) => {
+  try {
+    const ann = await Announcement.findById(req.params.id);
+    if (!ann) return res.status(404).json({ success: false, message: 'Not found.' });
+    const idx = ann.hearts.indexOf(req.user._id);
+    if (idx === -1) ann.hearts.push(req.user._id); else ann.hearts.splice(idx,1);
+    await ann.save();
+    res.json({ success: true, hearts: ann.hearts.length });
+  } catch (err) { res.status(500).json({ success: false, message: 'Server error.' }); }
+});
+
+app.delete('/api/announcements/:id', protect, adminOnly, async (req, res) => {
+  try { await Announcement.findByIdAndDelete(req.params.id); res.json({ success: true }); }
+  catch (err) { res.status(500).json({ success: false, message: 'Server error.' }); }
+});
 
 /*
   ROOMS

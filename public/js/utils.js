@@ -17,17 +17,24 @@ const res = await fetch(`${API_BASE}${path}`, {
   const resClone = res.clone();
 
   let data;
-  let errorMsg = 'Server error';
+  let errorMsg = 'An unknown error occurred';
 
   if (!res.ok) {
-    console.error('API error:', res.status, res.statusText);
     try {
       data = await resClone.json();
       errorMsg = data.errors ? 
         data.errors.map(e => e.msg).join(', ') : 
-        data.message || `Server error (${res.status})`;
+        data.message || 'Server responded with error';
     } catch (parseErr) {
-      errorMsg = 'Server error. Check browser console for details.';
+      // Non-JSON response (HTML error page), use text preview
+      try {
+        const text = await resClone.text();
+        errorMsg = text.includes('server error') || text.includes('error') ? 
+          'Server error (check console)' : 
+          text.slice(0, 100) + '...';
+      } catch (textErr) {
+        errorMsg = 'Server error (non-readable response)';
+      }
     }
     throw new Error(errorMsg);
   }
