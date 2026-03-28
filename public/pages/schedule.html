@@ -143,8 +143,18 @@
 
   <script src="../js/utils.js"></script>
   <script src="../js/navbar.js"></script>
-  <script>
+<script>
     injectNavbar('schedule');
+
+    // AI FAB
+    document.getElementById('ai-fab-container').innerHTML = `<button class="fab" onclick="if(confirm('Go to AI chat?')) window.location.href='/pages/ai-chat.html';" style="position:fixed;bottom:1.5rem;right:1.5rem;width:56px;height:56px;border-radius:50%;background:var(--color-primary);color:white;border:none;font-size:1.5rem;cursor:pointer;box-shadow:var(--shadow-lg);transition:all 0.2s;z-index:1000;" title="AI Assistant">
+  ✨
+</button>
+<style>
+.fab:hover { transform:scale(1.05); box-shadow:var(--shadow-xl); }
+.fab:active { transform:scale(0.98); }
+@media (max-width:640px) { .fab { bottom:1rem;right:1rem;width:52px;height:52px; } }
+</style>`;
     requireAuth();
 
     const HOURS = ['7am','8am','9am','10am','11am','12pm','1pm','2pm','3pm','4pm','5pm','6pm','7pm'];
@@ -291,6 +301,9 @@ const month = String(selectedDate.getMonth() + 1).padStart(2, '0');
     // Init
     loadSchedule(todayStr());
   </script>
+  <!-- AI FAB Button -->
+  <div id="ai-fab-container"></div>
+
 </body>
 </html>
 

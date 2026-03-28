@@ -204,6 +204,11 @@
         await apiFetch(`/bookings/${id}`, { method: 'DELETE' });
         showToast('Booking cancelled.', 'success');
         loadHistory();
+        // Switch to history tab
+        sidebarItems.forEach(i => i.classList.remove('account__sidebar-item--active'));
+        panels.forEach(p => p.classList.remove('account__panel--active'));
+        document.querySelector('[data-panel="history"]').classList.add('account__sidebar-item--active');
+        document.getElementById('panel-history').classList.add('account__panel--active');
       } catch (err) {
         showToast(err.message, 'error');
         btn.disabled = false;
