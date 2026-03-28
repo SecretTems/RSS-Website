@@ -321,7 +321,7 @@ let pendingBookings = [];
       }
       tbody.innerHTML = pendingBookings.map(b => `
         <tr>
-          <td>${b.user.username || b.user.email}</td>
+          <td>${b.user?.username || b.user?.email || 'Deleted User'}</td>
           <td>${b.room.name} (${b.room.number})</td>
           <td>${new Date(b.date).toLocaleDateString()}</td>
           <td>${b.startTime} - ${b.endTime}</td>
