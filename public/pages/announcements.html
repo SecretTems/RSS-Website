@@ -71,7 +71,7 @@
                 ${ann.author.profilePhoto ? `<img src="${ann.author.profilePhoto}" alt="${escapeHtml(ann.author.username)}" style="width:32px;height:32px;border-radius:50%;object-fit:cover;">` : ''}
                 <div>
                   <h2 class="announcement-card__title">${escapeHtml(ann.title)}</h2>
-                  <span class="announcement-card__date">${escapeHtml(ann.author.username)} • ${formatDate(ann.createdAt)}</span>
+${escapeHtml(ann.author?.username || 'Deleted User')} • ${formatDate(ann.createdAt)}</span>
                 </div>
               </div>
             </div>
@@ -198,8 +198,8 @@
         container.innerHTML = data.data.length ? data.data.map(c => `
           <div style="padding:.8rem 0;border-bottom:1px solid rgba(255,255,255,.08);">
             <div style="display:flex;gap:.4rem;align-items:center;margin-bottom:.3rem;">
-              ${c.author.profilePhoto ? `<img src="${c.author.profilePhoto}" style="width:26px;height:26px;border-radius:50%;object-fit:cover;">` : ''}
-              <strong>${escapeHtml(c.author.username)}</strong>
+              ${c.author?.profilePhoto ? `<img src="${c.author.profilePhoto}" style="width:26px;height:26px;border-radius:50%;object-fit:cover;">` : ''}
+              <strong>${escapeHtml(c.author?.username || 'Deleted User')}</strong>
               <small style="opacity:.6;margin-left:.2rem;">${new Date(c.createdAt).toLocaleString()}</small>
             </div>
             <p style="margin:0 .2rem 0 0;">${escapeHtml(c.text)}</p>
