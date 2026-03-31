@@ -181,9 +181,7 @@ router.post(
         }
       });
 
-const frontendUrl = process.env.FRONTEND_URL || 'https://rss-website-eta.vercel.app';
-      const baseUrl = frontendUrl.replace(/\/pages\/[^\/]+\.html$/, '');
-      const resetUrl = `${baseUrl}/pages/reset-password.html?email=${encodeURIComponent(email)}&token=${resetToken}`;
+const resetUrl = `https://rss-website-eta.vercel.app/pages/reset-password.html?email=${encodeURIComponent(email)}&token=${resetToken}`;
 
 
       await transporter.sendMail({
