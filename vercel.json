@@ -17,7 +17,11 @@
       "dest": "/api/server.js"
     },
     {
-      "src": "/((css|js|assets|pages|images)/.*)",
+      "src": "/pages/(.*)",
+      "dest": "/public/pages/$1"
+    },
+    {
+      "src": "/((css|js|assets|images)/.*)",
       "dest": "/public/$1"
     },
     {
