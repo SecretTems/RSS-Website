@@ -115,7 +115,9 @@ function initNavbar(activePage) {
     hamburger.addEventListener('click', () => nav.classList.toggle('navbar__nav--open'));
   }
 
-  if (!user && activePage !== 'login' && activePage !== 'signup') {
+  // Skip auth prompts on auth pages
+  const authPages = ['login', 'signup', 'reset-password'];
+  if (!user && !authPages.includes(activePage)) {
     showLoginPrompt();
   }
 }

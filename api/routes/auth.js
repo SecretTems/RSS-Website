@@ -16,10 +16,7 @@ const signToken = (id) => {
 };
 
 const getFrontendBaseUrl = (req) => {
-  const configuredUrl = process.env.FRONTEND_URL?.trim();
-  if (configuredUrl) {
-    return configuredUrl.replace(/\/$/, '').replace(/\/pages\/[^\/]+\.html$/, '');
-  }
+  const cleanUrl = (value) => value?.trim().replace(/\/$/, '').replace(/\/pages\/[^\/]+\.html$/, '');
 
   const forwardedProtoHeader = req.headers['x-forwarded-proto'];
   const forwardedHostHeader = req.headers['x-forwarded-host'] || req.headers.host;
@@ -31,11 +28,16 @@ const getFrontendBaseUrl = (req) => {
     : forwardedHostHeader;
 
   if (forwardedHost) {
-    return `${forwardedProto}://${forwardedHost}`.replace(/\/$/, '');
+    return cleanUrl(`${forwardedProto}://${forwardedHost}`);
   }
 
   if (process.env.VERCEL_URL) {
-    return `https://${process.env.VERCEL_URL}`.replace(/\/$/, '');
+    return cleanUrl(`https://${process.env.VERCEL_URL}`);
+  }
+
+  const configuredUrl = cleanUrl(process.env.FRONTEND_URL);
+  if (configuredUrl) {
+    return configuredUrl;
   }
 
   return 'http://localhost:3000';
