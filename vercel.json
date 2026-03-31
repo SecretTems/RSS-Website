@@ -33,11 +33,11 @@
       "dest": "/public/pages/$1"
     },
     {
-      "src": "/",
+      "src": "/(?!pages/)(.*)",
       "dest": "/public/pages/login.html"
     },
     {
-      "src": "/(.*)",
+      "src": "/",
       "dest": "/public/pages/login.html"
     }
   ]
