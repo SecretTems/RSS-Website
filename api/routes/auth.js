@@ -3,9 +3,11 @@ const router = express.Router();
 const jwt = require('jsonwebtoken');
 const { body, validationResult } = require('express-validator');
 const User = require('../models/User');
+const Announcement = require('../models/Announcement');
 const { protect } = require('../middleware/auth');
 const nodemailer = require('nodemailer');
 const crypto = require('crypto');
+
 
 const signToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
@@ -179,8 +181,9 @@ router.post(
         }
       });
 
-      const frontendUrl = process.env.FRONTEND_URL || 'https://rrs-phinma.vercel.app';
-      const resetUrl = `${frontendUrl}/pages/reset-password.html?email=${email}&token=${resetToken}`;
+      const frontendUrl = process.env.FRONTEND_URL || 'https://rrs-website-eta.vercel.app';
+      const resetUrl = `${frontendUrl}/pages/reset-password.html?email=${encodeURIComponent(email)}&token=${resetToken}`;
+
 
       await transporter.sendMail({
         from: `"RRS Reset" <${process.env.SMTP_USER || 'no-reply@rrs.com'}>`,
