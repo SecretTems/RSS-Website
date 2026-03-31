@@ -181,7 +181,7 @@ router.post(
         }
       });
 
-const resetUrl = `https://rss-website-eta.vercel.app/pages/reset-password.html?email=${encodeURIComponent(email)}&token=${resetToken}`;
+const resetUrl = `https://rrs-website-eta.vercel.app/pages/reset-password.html?email=${encodeURIComponent(email)}&token=${resetToken}`;
 
 
       await transporter.sendMail({
