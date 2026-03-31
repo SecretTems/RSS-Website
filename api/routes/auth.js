@@ -15,6 +15,32 @@ const signToken = (id) => {
   });
 };
 
+const getFrontendBaseUrl = (req) => {
+  const configuredUrl = process.env.FRONTEND_URL?.trim();
+  if (configuredUrl) {
+    return configuredUrl.replace(/\/$/, '').replace(/\/pages\/[^\/]+\.html$/, '');
+  }
+
+  const forwardedProtoHeader = req.headers['x-forwarded-proto'];
+  const forwardedHostHeader = req.headers['x-forwarded-host'] || req.headers.host;
+  const forwardedProto = Array.isArray(forwardedProtoHeader)
+    ? forwardedProtoHeader[0]
+    : (forwardedProtoHeader || 'https');
+  const forwardedHost = Array.isArray(forwardedHostHeader)
+    ? forwardedHostHeader[0]
+    : forwardedHostHeader;
+
+  if (forwardedHost) {
+    return `${forwardedProto}://${forwardedHost}`.replace(/\/$/, '');
+  }
+
+  if (process.env.VERCEL_URL) {
+    return `https://${process.env.VERCEL_URL}`.replace(/\/$/, '');
+  }
+
+  return 'http://localhost:3000';
+};
+
 const sendToken = (user, statusCode, res) => {
   const token = signToken(user._id);
 
@@ -181,8 +207,7 @@ router.post(
         }
       });
 
-const frontendUrl = process.env.FRONTEND_URL || 'https://rss-website-eta.vercel.app';
-      const baseUrl = frontendUrl.replace(/\/pages\/[^\/]+\.html$/, '');
+      const baseUrl = getFrontendBaseUrl(req);
       const resetUrl = `${baseUrl}/pages/reset-password.html?email=${encodeURIComponent(email)}&token=${resetToken}`;
 
 
